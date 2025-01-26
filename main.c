@@ -86,7 +86,51 @@ char **situationkListSubtask(int index)
 
     return subtask_c_array;
 }
+int category_i = 0;
 
+char **flatten_categories(cJSON *categories)
+{
+    category_i = 0;
+
+    char **categories_array;
+    cJSON *outer_item = NULL;
+    cJSON_ArrayForEach(outer_item, categories)
+    {
+
+        cJSON *inner_item = NULL;
+        cJSON_ArrayForEach(inner_item, outer_item)
+        {
+
+            categories_array[category_i] = strdup(inner_item->valuestring);
+            category_i++;
+        }
+    }
+    return categories_array;
+}
+int subtasks_i = 0;
+char **flatten_subtasks(cJSON *subtasks)
+{
+
+    subtasks_i = 0;
+    char **subtasks_array;
+    cJSON *outer_item = NULL;
+    cJSON_ArrayForEach(outer_item, subtasks)
+    {
+        if (cJSON_IsArray(outer_item))
+        {
+            cJSON *inner_item = NULL;
+            cJSON_ArrayForEach(inner_item, outer_item)
+            {
+                if (cJSON_IsString(inner_item))
+                {
+                    subtasks_array[subtasks_i] = strdup(inner_item->valuestring);
+                    subtasks_i++;
+                }
+            }
+        }
+    }
+    return subtasks_array;
+}
 int sizeTask()
 {
 
@@ -1106,7 +1150,6 @@ int *date()
 }
 
 void deadlineSort(int len)
-
 {
 
     char **dead_array = deadlineArray();
@@ -1121,6 +1164,28 @@ void deadlineSort(int len)
                 char *temp = dead_array[j];
                 dead_array[j] = dead_array[j + 1];
                 dead_array[j + 1] = temp;
+                swap(j, j + 1);
+            }
+        }
+    }
+}
+
+void sortAlphabet(int len)
+
+{
+
+    char **tasks = taskList();
+
+    for (int i = 0; i < len - 1; i++)
+    {
+        for (int j = 0; j < len - 1 - i; j++)
+        {
+
+            if (strcmp(tasks[j], tasks[j + 1]) > 0)
+            {
+                char *temp = tasks[j];
+                tasks[j] = tasks[j + 1];
+                tasks[j + 1] = temp;
                 swap(j, j + 1);
             }
         }
@@ -1179,7 +1244,9 @@ void modalSorting()
         case '\n':
             if (highlighted == 1)
             {
-                // sortAlphabet();
+                int temp = sizeTask();
+
+                sortAlphabet(temp);
             }
             else if (highlighted == 2)
             {
@@ -1196,6 +1263,78 @@ void modalSorting()
             break;
         }
     }
+    wclear(win);
+    wrefresh(win);
+    delwin(win);
+}
+
+void search()
+{
+    WINDOW *win = newwin(18, 46, 9, 23);
+    box(win, 0, 0);
+    curs_set(1);
+    char task[50] = "";
+    int ch, i = 0;
+    mvwprintw(win, 1, 1, "Enter your search term : ");
+    mvwprintw(win, 2, 1, "");
+    char **tasks = taskList();
+    int len = sizeTask();
+
+    cJSON *root = cJSON_Parse(readFile());
+    cJSON *categories_json = cJSON_GetObjectItem(root, "categories");
+    cJSON *subtasks_json = cJSON_GetObjectItem(root, "subtasks");
+    char **categories = flatten_categories(categories_json);
+    char **subtasks = flatten_subtasks(subtasks_json);
+
+    wrefresh(win);
+    while ((ch = wgetch(win)) != '\n' && i < sizeof(task) - 1)
+    {
+        if (ch == KEY_BACKSPACE || ch == 127)
+        {
+            if (i > 0)
+            {
+                i--;
+                task[i] = '\0';
+                mvwprintw(win, 2, 1 + i, " ");
+            }
+        }
+        else
+        {
+            task[i] = ch;
+            i++;
+            task[i] = '\0';
+        }
+        mvwprintw(win, 2, 1, "%s", task);
+        wrefresh(win);
+    }
+
+    for (int i = 0; i < len; i++)
+    {
+        if (strcmp(task, tasks[i]) == 0)
+        {
+            mvwprintw(win, 4, 1, "task founded and it is : %s", task);
+            break;
+        }
+    }
+    for (int i = 0; i < subtasks_i; i++)
+    {
+        if (strcmp(task, subtasks[i]) == 0)
+        {
+            mvwprintw(win, 5, 1, "tsubtask founded and it is : %s", task);
+            break;
+        }
+        for (int i = 0; i < category_i; i++)
+        {
+            if (strcmp(task, categories[i]) == 0)
+            {
+                mvwprintw(win, 6, 1, "category founded and it is : %s", task);
+                break;
+            }
+        }
+    }
+    mvwprintw(win, 7, 1, "Press any key to exit...");
+    wrefresh(win);
+    wgetch(win);
     wclear(win);
     wrefresh(win);
     delwin(win);
@@ -1439,6 +1578,9 @@ int main(int argc, char *argv[])
         case 's':
             modalSorting();
             werase(tasks);
+            break;
+        case 't':
+            search();
             break;
         default:
 
