@@ -1,0 +1,2 @@
+compiling :  gcc -w main.c -lcjson -lncurses
+run program : ./a.out 0 (0 as argumant) / (or"./a.out List" for listing tasks)
