@@ -82,6 +82,7 @@ char **situationkListSubtask(int index)
 
     return subtask_c_array;
 }
+
 int category_i = 0;
 char **flatten_categories(cJSON *categories)
 {
