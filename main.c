@@ -50,12 +50,10 @@ char *deadline_json(int index)
 char **situationkList()
 {
     cJSON *root = cJSON_Parse(readFile());
-
     cJSON *tasks_array = cJSON_GetObjectItem(root, "sit");
     int array_size = cJSON_GetArraySize(tasks_array);
     char **tasks = (char **)malloc(array_size * sizeof(char *));
     int i = 0;
-
     cJSON *task = NULL;
     cJSON_ArrayForEach(task, tasks_array)
     {
@@ -70,12 +68,10 @@ char **situationkListSubtask(int index)
 {
 
     cJSON *root = cJSON_Parse(readFile());
-
     cJSON *tasks_array = cJSON_GetObjectItem(root, "subtasksSit");
     cJSON *subtasks_array = cJSON_GetArrayItem(tasks_array, index);
     int array_size = cJSON_GetArraySize(tasks_array);
     int subtask_size = cJSON_GetArraySize(subtasks_array);
-
     char **subtask_c_array = malloc(subtask_size * sizeof(char *));
     for (int i = 0; i < subtask_size; i++)
     {
@@ -87,7 +83,6 @@ char **situationkListSubtask(int index)
     return subtask_c_array;
 }
 int category_i = 0;
-
 char **flatten_categories(cJSON *categories)
 {
     category_i = 0;
@@ -107,6 +102,7 @@ char **flatten_categories(cJSON *categories)
     }
     return categories_array;
 }
+
 int subtasks_i = 0;
 char **flatten_subtasks(cJSON *subtasks)
 {
@@ -131,6 +127,7 @@ char **flatten_subtasks(cJSON *subtasks)
     }
     return subtasks_array;
 }
+
 int sizeTask()
 {
 
@@ -254,7 +251,9 @@ void descriptionAdd(char *description)
 
 void modalDeadlineAddReplace(int highlighted)
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
     char task[50] = "";
@@ -354,7 +353,9 @@ int deadlineVaild(char *str)
 
 void modalDeadlineAdd()
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
     char task[100] = "";
@@ -413,10 +414,12 @@ void modalDeadlineAdd()
 
 void modalDescriptionHandler()
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
-    char task[50] = "";
+    char task[150] = "";
     int ch, i = 0;
     mvwprintw(win, 1, 1, "Enter your description: ");
     mvwprintw(win, 2, 1, "");
@@ -453,7 +456,9 @@ void modalDescriptionHandler()
 
 void modalHandler()
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
     char task[50] = "";
@@ -516,7 +521,9 @@ void categoryAdder(char category[], int index)
 void modalHandlerSubtask(int index)
 {
 
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
     char task[50] = "";
@@ -556,7 +563,9 @@ void modalHandlerSubtask(int index)
 
 void modalHandlerCategory(int index)
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     curs_set(1);
     char task[50] = "";
@@ -644,7 +653,9 @@ void editJSON(int index, char *new_text)
 void editHandlerDescription(int index, char *task_text)
 {
     keypad(stdscr, TRUE);
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     wrefresh(win);
     curs_set(1);
@@ -700,7 +711,9 @@ void editHandlerDescription(int index, char *task_text)
 void editHandler(int index, char *task_text)
 {
     keypad(stdscr, TRUE);
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     wrefresh(win);
     curs_set(1);
@@ -824,7 +837,6 @@ void delete_category(int index, int highlighted, WINDOW *win)
 void subtasksHandler(WINDOW *win, int index)
 {
     int highlighted = 0;
-
     int choice;
     while (1)
 
@@ -991,40 +1003,6 @@ void categoriesHandler(WINDOW *win, int index)
     }
 }
 
-void dates()
-{
-
-    int len = sizeTask();
-    int day1;
-    int day2;
-    char *deadline1;
-    char *deadline2;
-    cJSON *root = cJSON_Parse(readFile());
-    cJSON *date_array = cJSON_GetObjectItem(root, "date");
-
-    for (int i = 0; i < len; i++)
-    {
-
-        deadline1 = deadline_json(i);
-        char *token1;
-        char *token2;
-        int year1, month1, day1, year2, month2, day2;
-        token1 = strtok(deadline1, "/");
-        year1 = atoi(token1);
-        token1 = strtok(NULL, "/");
-        month1 = atoi(token1);
-        token1 = strtok(NULL, "/");
-        day1 = atoi(token1);
-        day1 = year1 * 356 + (month1 * 30) + day1;
-        sprintf(deadline1, "%d", day1);
-        cJSON_AddItemToArray(date_array, cJSON_CreateString(deadline1));
-    }
-
-    cJSON *updated_json = cJSON_Print(root);
-    writeFile("task.json", updated_json);
-    free(updated_json);
-}
-
 void initialTask(int highlighted)
 {
 
@@ -1129,26 +1107,6 @@ char **deadlineArray()
     return tasks;
 }
 
-int *date()
-{
-    char **array = deadlineArray();
-    int len = sizeTask();
-    int year, month, day;
-    for (int i = 0; i < len; i++)
-    {
-        char task[20];
-        sscanf(array[i], "%d/%d/%d", &year, &month, &day);
-        day = year * 365 + month * 30 + day;
-        cJSON *root = cJSON_Parse(readFile());
-        cJSON *array_task = cJSON_GetObjectItem(root, "temp");
-        sprintf(task, "%d", day);
-        cJSON_AddItemToArray(array_task, cJSON_CreateString(task));
-        char *updated_json_string = cJSON_Print(root);
-        writeFile("task.json", updated_json_string);
-        free(updated_json_string);
-    }
-}
-
 void deadlineSort(int len)
 {
 
@@ -1194,7 +1152,9 @@ void sortAlphabet(int len)
 
 void modalSorting()
 {
-    WINDOW *win = newwin(18, 46, 9, 23);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
+    WINDOW *win = newwin(y_max * 0.53, x_max * 0.4, y_max * 0.1, x_max / 10);
     box(win, 0, 0);
     char option[][30] = {"default", "alphabet", "deadline"};
     keypad(stdscr, TRUE);
@@ -1359,12 +1319,14 @@ int main(int argc, char *argv[])
     cbreak();
     noecho();
     curs_set(0);
+    int x_max, y_max;
+    getmaxyx(stdscr, y_max, x_max);
 
-    WINDOW *tasks = newwin(36, 92, 0, 0);
-    WINDOW *description = newwin(27, 92, 0, 92);
-    WINDOW *category = newwin(9, 92, 27, 92);
-    WINDOW *subtasks = newwin(9, 92, 36, 0);
-    WINDOW *deadline = newwin(9, 92, 36, 92);
+    WINDOW *tasks = newwin(y_max * 0.67, x_max / 2, 0, 0);
+    WINDOW *description = newwin(y_max * 0.35, x_max / 2, 0, x_max / 2);
+    WINDOW *category = newwin(y_max * 0.34, x_max / 2, y_max * 0.35, x_max / 2);
+    WINDOW *subtasks = newwin(y_max * 0.35, x_max / 2, y_max * 0.67, 0);
+    WINDOW *deadline = newwin(y_max * 0.34, x_max / 2, y_max * 0.67, x_max / 2);
     box(tasks, 0, 0);
     box(description, 0, 0);
     box(category, 0, 0);
@@ -1511,6 +1473,7 @@ int main(int argc, char *argv[])
             box(tasks, 0, 0);
 
             break;
+
         case 'n':
             modalDeadlineAddReplace(highlighted);
             break;
@@ -1539,7 +1502,6 @@ int main(int argc, char *argv[])
                 box(tasks, 0, 0);
             }
             wrefresh(tasks);
-
             break;
 
         case 'e':
@@ -1547,14 +1509,12 @@ int main(int argc, char *argv[])
             werase(tasks);
             box(tasks, 0, 0);
             curs_set(0);
-
             break;
 
         case ' ':
             change_situation(highlighted, sitList[highlighted]);
             werase(tasks);
             box(tasks, 0, 0);
-
             break;
 
         case 'r':
@@ -1565,7 +1525,6 @@ int main(int argc, char *argv[])
             box(description, 0, 0);
             werase(tasks);
             box(tasks, 0, 0);
-
             break;
 
         case 'h':
@@ -1575,13 +1534,16 @@ int main(int argc, char *argv[])
         case 'c':
             categoriesHandler(category, highlighted);
             break;
+
         case 's':
             modalSorting();
             werase(tasks);
             break;
+
         case 't':
             search();
             break;
+
         default:
 
             break;

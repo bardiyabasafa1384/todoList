@@ -1,71 +1,10 @@
 {
-	"tasks": [
-		"a",
-		"c",
-		"d",
-		"jfkjff",
-		"test"
-	],
-	"sit": [
-		"o",
-		"o",
-		"o",
-		"o",
-		"o"
-	],
-	"description": [
-		"",
-		"kgjjfjn",
-		"",
-		"jdfj",
-		""
-	],
-	"deadline": [
-		"1403/10/10",
-		"1403/10/10",
-		"1400/10/10",
-		"1404/1/10",
-		"1399/10/10"
-	],
-	"categories": [
-		[
-			"o",
-			"fjfk"
-		],
-		[
-			"jdkdj"
-		],
-		[
-			"kjfjk",
-			"fijjf",
-			"djdjd"
-		],
-		[],
-		[]
-	],
-	"subtasks": [
-		[],
-		[
-			"kjffjjf"
-		],
-		[],
-		[],
-		[]
-	],
-	"subtasksSit": [
-		[],
-		[
-			"x"
-		],
-		[],
-		[],
-		[]
-	],
-	"temp": [
-		"512405",
-		"512405",
-		"511310",
-		"512500",
-		"510945"
-	]
+	"tasks":	["test"],
+	"sit":	["o"],
+	"description":	["test"],
+	"deadline":	["1403/10/10"],
+	"categories":	[["cat 1"]],
+	"subtasks":	[["subtask1"]],
+	"subtasksSit":	[["o"]],
+	"temp":	["512405"]
 }
